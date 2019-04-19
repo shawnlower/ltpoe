@@ -18,4 +18,9 @@ export class LtpService {
   get() {
       return of(this.types);
   }
+
+  put(type) {
+      console.log("Want to add: ", type);
+      this.types.push(type);
+  }
 }

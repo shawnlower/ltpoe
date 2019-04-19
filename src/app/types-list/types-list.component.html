@@ -8,6 +8,13 @@
     <tr *ngFor="let type of types">
       <td>{{type.name}}</td>
       <td>{{type.description}}</td>
+      <td
+        (click)="deleteType(type)"
+      >Delete</td>
     </tr>
   </tbody>
 </table>
+
+<button>New Type</button>
+
+<app-type-editor></app-type-editor>

@@ -12,6 +12,10 @@ export class TypesListComponent implements OnInit {
 
   constructor(private ltpService: LtpService) { }
 
+  deleteType(type) {
+      console.log("Request to delete: ", type);
+  }
+
   ngOnInit() {
       this.ltpService.get().subscribe(res => {
           this.types = res;
