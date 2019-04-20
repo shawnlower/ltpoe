@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
+import { HttpClientModule }    from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -14,9 +15,10 @@ import { TypeEditorComponent } from './type-editor/type-editor.component';
     TypeEditorComponent
   ],
   imports: [
+    AppRoutingModule,
     BrowserModule,
     FormsModule,
-    AppRoutingModule
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
