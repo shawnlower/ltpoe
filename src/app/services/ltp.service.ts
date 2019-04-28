@@ -1,10 +1,13 @@
+import { v4 as uuid } from 'uuid';
+
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { of, Observable } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
 
 import { Type } from '../models/type';
+import { Property } from '../models/property';
  
 const httpOptions = {
   headers: new HttpHeaders({
@@ -17,56 +20,43 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class LtpService {
-  types: Array<Object> = [
-      { 'name': 'Book', 'description':  'A book, either electronic or printed' },
-      { 'name': 'Person', 'description':  'A person (alive, dead, undead, or fictional).' },
-      { 'name': 'Event', 'description':  'An event happening at a certain time and location, such as a concert, lecture, or festival.' }
-  ];
 
+  types: Array<Type>;
   private queryUrl = 'http://localhost:3030/test/query';
 
-  private testQuery = `query=
+  private getTypesQuery = `query=
       PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
       PREFIX schema: <http://schema.org/>
       PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
       PREFIX owl: <http://www.w3.org/2002/07/owl#>
 
-      SELECT DISTINCT ?name ?description WHERE {
-        { ?s rdf:type owl:Class . }
+      SELECT DISTINCT ?iri ?name ?description WHERE {
+        { ?iri rdf:type owl:Class . }
           UNION
-        { ?s rdf:type rdfs:Class . }
-        ?s rdfs:label ?name .
-        ?s rdfs:comment ?description
-      }
+        { ?iri rdf:type rdfs:Class . }
+        ?iri rdfs:label ?name .
+        ?iri rdfs:comment ?description
+      } LIMIT 10
   `;
+
+  private getNewTypeQuery(iri){
+    return `query=
+      PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+      PREFIX schema: <http://schema.org/>
+      PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+      PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+      INSERT {
+        <${iri}> rdf:type rdfs:Class .
+        <${iri}> rdfs:label "Foo" .
+        <${iri}> rdfs:comment "Some fooish description"
+      } WHERE {}
+    `;
+  }
 
   constructor(private http: HttpClient) { }
 
-  get() {
-    // return of(this.types);
-    return this.getTypes();
-  }
-
-  getTypes(): Observable<Type[]> {
-
-    return this.http.post<any>(this.queryUrl, this.testQuery, httpOptions)
-      .pipe(
-          tap(response => console.log('response ', response)),
-          map(response => {
-            let types: Type[] = [];
-            for (var i=0; i < response.results.bindings.length; i++) {
-              types.push({
-                'name': response.results.bindings[i].name.value,
-                'description': response.results.bindings[i].description.value
-              });
-            }
-            return types;
-          }),
-          catchError(this.handleError<Type[]>('getTypes', []))
-      );
-  }
-
-   /**
+  /**
    * Handle Http operation that failed.
    * Let the app continue.
    * @param operation - name of the operation that failed
@@ -86,8 +76,76 @@ export class LtpService {
     };
   }
 
-  put(type) {
-      console.log("Want to add: ", type);
-      this.types.push(type);
+  get() {
+    return of(this.types);
+  }
+
+  getType(id: string): Observable<Type> {
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Accept': 'application/json'
+      })
+    };
+
+    return this.http.get<any>("http://localhost:5000/v1/types/" + id, httpOptions)
+      .pipe(
+          tap(response => console.log('response ', response)),
+          map(response => {
+            const t = <Type>response.metadata;
+            t.properties = <Property[]>response.properties;
+            return t;
+          })
+      );
+  }
+
+  getTypes(): Observable<Type[]> {
+
+    return this.http.post<any>(this.queryUrl, this.getTypesQuery, httpOptions)
+      .pipe(
+          tap(response => console.log('response ', response)),
+          map(response => {
+            this.types = [];
+            for (var i=0; i < response.results.bindings.length; i++) {
+              this.types.push({
+                'iri': response.results.bindings[i].iri.value,
+                'name': response.results.bindings[i].name.value,
+                'description': response.results.bindings[i].description.value
+              });
+            }
+            return this.types;
+          }),
+          catchError(this.handleError<Type[]>('getTypes', []))
+      );
+  }
+
+
+  newType(type) {
+
+    const prefix = "http://ltp.shawnlower.net/i/";
+    const iri: string = `${prefix}${uuid()}`;
+
+    const query = this.getNewTypeQuery(iri);
+
+    console.log("newType type: ", type);
+    console.log("newType query: ", query);
+
+    let httpOptions = {
+      headers: new HttpHeaders({
+             'Accept': '*/*',
+             'Content-Type': 'application/x-www-form-urlencoded',
+             "Authorization": "Basic " + btoa("admin:8XHWTTGfcZqWfbo")
+             })
+    };
+
+    let data = new HttpParams();
+    console.log("headers", httpOptions);
+
+    return this.http.post("http://localhost:3031/test/update", query, httpOptions)
+      .subscribe(response => {
+            console.log("Adding: ", type);
+            console.log("Response: ", response);
+            this.types.push(<Type>type);
+      });
   }
 }
