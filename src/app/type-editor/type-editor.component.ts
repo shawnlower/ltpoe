@@ -14,7 +14,7 @@ export class TypeEditorComponent implements OnInit {
   submitted = false;
 
   onSubmit() {
-      this.ltpService.put(this.model);
+      this.ltpService.newType(this.model);
       this.submitted = true;
   }
 

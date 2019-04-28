@@ -1,0 +1,26 @@
+<h1>Type</h1>
+
+<div *ngIf="type$ else loading">
+<p><i>{{(type$ | async)?.description}}</i>
+
+<table>
+  <thead>
+    <th>Property Name</th>
+    <th>Description</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let property of (type$ | async)?.properties">
+      <td>{{property.name}}</td>
+      <td>{{property.description}}</td>
+      <td>{{property.datatype}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<button>Instantiate</button>
+</div>
+
+<ng-template #loading>
+    <p>Condition is false ...</p>
+</ng-template>
+

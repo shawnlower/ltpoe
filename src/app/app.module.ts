@@ -7,12 +7,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TypesListComponent } from './types-list/types-list.component';
 import { TypeEditorComponent } from './type-editor/type-editor.component';
+import { TypeDetailComponent } from './type-detail/type-detail.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TypesListComponent,
-    TypeEditorComponent
+    TypeEditorComponent,
+    TypeDetailComponent
   ],
   imports: [
     AppRoutingModule,
