@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 import { LtpService } from '../services/ltp.service';
+import { Type } from '../models/type';
 
 @Component({
   selector: 'app-types-list',
@@ -9,16 +11,21 @@ import { LtpService } from '../services/ltp.service';
 })
 export class TypesListComponent implements OnInit {
 
-  types: Array<Object>;
+  types: Array<Type>;
 
-  constructor(private ltpService: LtpService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private ltpService: LtpService) { }
 
   deleteType(type) {
       console.log("Request to delete: ", type);
   }
 
   ngOnInit() {
-      this.ltpService.get().subscribe(res => {
+      // this.route.paramMap.pipe(params =>
+      //   console.log('got params', params));
+
+      this.ltpService.getTypes().subscribe(res => {
           this.types = res;
       });
   }

@@ -6,7 +6,7 @@
   </thead>
   <tbody>
     <tr *ngFor="let type of types">
-      <td>{{type.name}}</td>
+      <td><a [routerLink]="['/type', type.name]">{{type.name}}</a></td>
       <td>{{type.description}}</td>
       <td
         (click)="deleteType(type)"
