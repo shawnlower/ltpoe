@@ -1,12 +1,12 @@
-<h1>Type</h1>
-
 <div *ngIf="type$ else loading">
-<p><i>{{(type$ | async)?.description}}</i>
+<h1>{{ (type$ | async)?.name }}</h1>
+<p>Description: <i>{{(type$ | async)?.description}}</i>
 
 <table>
   <thead>
     <th>Property Name</th>
     <th>Description</th>
+    <th>Data Type</th>
   </thead>
   <tbody>
     <tr *ngFor="let property of (type$ | async)?.properties">
@@ -17,10 +17,10 @@
   </tbody>
 </table>
 
-<button>Instantiate</button>
+<button mat-raised-button (click)="instantiate()">Instantiate</button>
 </div>
 
 <ng-template #loading>
-    <p>Condition is false ...</p>
+    <p>Loading...</p>
 </ng-template>
 
