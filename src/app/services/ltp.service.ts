@@ -13,7 +13,6 @@ import { Property } from '../models/property';
 const httpOptions = {
   headers: new HttpHeaders({
     Accept: 'application/json',
-    'Content-Type': 'application/x-www-form-urlencoded'
   })
 };
 
@@ -23,22 +22,7 @@ const httpOptions = {
 export class LtpService {
 
   types: Array<Type>;
-  private queryUrl = 'http://localhost:3030/test/query';
-
-  private getTypesQuery = `query=
-      PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-      PREFIX schema: <http://schema.org/>
-      PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-      PREFIX owl: <http://www.w3.org/2002/07/owl#>
-
-      SELECT DISTINCT ?iri ?name ?description WHERE {
-        { ?iri rdf:type owl:Class . }
-          UNION
-        { ?iri rdf:type rdfs:Class . }
-        ?iri rdfs:label ?name .
-        ?iri rdfs:comment ?description
-      } LIMIT 10
-  `;
+  private queryUrl = 'http://localhost:5000/v1/types/';
 
   private getNewTypeQuery(iri) {
     return `query=
@@ -102,16 +86,16 @@ export class LtpService {
 
   getTypes(): Observable<Type[]> {
 
-    return this.http.post<any>(this.queryUrl, this.getTypesQuery, httpOptions)
+    return this.http.get<any>(this.queryUrl, httpOptions)
       .pipe(
           tap(response => console.log('response ', response)),
           map(response => {
             this.types = [];
-            for (var i=0; i < response.results.bindings.length; i++) {
+            for (const type of response.data) {
               this.types.push({
-                iri: response.results.bindings[i].iri.value,
-                name: response.results.bindings[i].name.value,
-                description: response.results.bindings[i].description.value
+                iri: type.iri,
+                name: type.name,
+                description: type.description,
               });
             }
             return this.types;
