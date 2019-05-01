@@ -7,7 +7,7 @@
   <tbody>
     <tr *ngFor="let type of types">
       <td><a [routerLink]="['/type', type.name]">{{type.name}}</a></td>
-      <td>{{type.description}}</td>
+      <td [innerHtml]="type.description"></td>
       <td
         (click)="deleteType(type)"
       >Delete</td>

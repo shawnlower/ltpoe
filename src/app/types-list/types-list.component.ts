@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 import { LtpService } from '../services/ltp.service';
@@ -15,6 +16,7 @@ export class TypesListComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private sanitizer: DomSanitizer,
     private ltpService: LtpService) { }
 
   deleteType(type) {
@@ -22,11 +24,14 @@ export class TypesListComponent implements OnInit {
   }
 
   ngOnInit() {
-      // this.route.paramMap.pipe(params =>
-      //   console.log('got params', params));
 
-      this.ltpService.getTypes().subscribe(res => {
-          this.types = res;
+    this.ltpService.getTypes().subscribe(res => {
+      this.types = [];
+      // Trust any HTML in the description.
+      res.forEach(t => {
+        t.description = this.sanitizer.bypassSecurityTrustHtml(t.description) as string;
+        this.types.push(t);
       });
+    });
   }
 }
