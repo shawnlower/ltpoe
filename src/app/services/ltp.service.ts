@@ -152,9 +152,9 @@ export class LtpService {
 
   newItem(name): Observable<Item> {
     return of({
-      id: 'testBook',
-      name: 'The Indispensable Calvin and Hobbes',
-      description: 'The works of Bill Waterson',
+      id: 'war-of-the-worlds',
+      name: 'Mock Data',
+      description: 'The works of H.G. Wells',
       properties: []
     });
   }
