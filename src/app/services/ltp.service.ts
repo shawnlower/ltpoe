@@ -6,12 +6,13 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { of, Observable } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
 
+import { Item } from '../models/item';
 import { Type } from '../models/type';
 import { Property } from '../models/property';
- 
+
 const httpOptions = {
   headers: new HttpHeaders({
-    'Accept': 'application/json',
+    Accept: 'application/json',
     'Content-Type': 'application/x-www-form-urlencoded'
   })
 };
@@ -39,7 +40,7 @@ export class LtpService {
       } LIMIT 10
   `;
 
-  private getNewTypeQuery(iri){
+  private getNewTypeQuery(iri) {
     return `query=
       PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
       PREFIX schema: <http://schema.org/>
@@ -62,7 +63,7 @@ export class LtpService {
    * @param operation - name of the operation that failed
    * @param result - optional value to return as the observable result
    */
-  private handleError<T> (operation = 'operation', result?: T) {
+  private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 
       // TODO: send the error to remote logging infrastructure
@@ -84,11 +85,11 @@ export class LtpService {
 
     const httpOptions = {
       headers: new HttpHeaders({
-        'Accept': 'application/json'
+        Accept: 'application/json'
       })
     };
 
-    return this.http.get<any>("http://localhost:5000/v1/types/" + id, httpOptions)
+    return this.http.get<any>('http://localhost:5000/v1/types/' + id, httpOptions)
       .pipe(
           tap(response => console.log('response ', response)),
           map(response => {
@@ -108,9 +109,9 @@ export class LtpService {
             this.types = [];
             for (var i=0; i < response.results.bindings.length; i++) {
               this.types.push({
-                'iri': response.results.bindings[i].iri.value,
-                'name': response.results.bindings[i].name.value,
-                'description': response.results.bindings[i].description.value
+                iri: response.results.bindings[i].iri.value,
+                name: response.results.bindings[i].name.value,
+                description: response.results.bindings[i].description.value
               });
             }
             return this.types;
@@ -122,30 +123,59 @@ export class LtpService {
 
   newType(type) {
 
-    const prefix = "http://ltp.shawnlower.net/i/";
-    const iri: string = `${prefix}${uuid()}`;
+    const prefix = 'http://ltp.shawnlower.net/i/';
+    const iri = `${prefix}${uuid()}`;
 
     const query = this.getNewTypeQuery(iri);
 
-    console.log("newType type: ", type);
-    console.log("newType query: ", query);
+    console.log('newType type: ', type);
+    console.log('newType query: ', query);
 
     let httpOptions = {
       headers: new HttpHeaders({
-             'Accept': '*/*',
+             Accept: '*/*',
              'Content-Type': 'application/x-www-form-urlencoded',
-             "Authorization": "Basic " + btoa("admin:8XHWTTGfcZqWfbo")
+             Authorization: 'Basic ' + btoa('admin:8XHWTTGfcZqWfbo')
              })
     };
 
-    let data = new HttpParams();
-    console.log("headers", httpOptions);
+    const data = new HttpParams();
+    console.log('headers', httpOptions);
 
-    return this.http.post("http://localhost:3031/test/update", query, httpOptions)
+    return this.http.post('http://localhost:3031/test/update', query, httpOptions)
       .subscribe(response => {
-            console.log("Adding: ", type);
-            console.log("Response: ", response);
+            console.log('Adding: ', type);
+            console.log('Response: ', response);
             this.types.push(<Type>type);
       });
   }
+
+  newItem(name): Observable<Item> {
+    return of({
+      id: 'testBook',
+      name: 'The Indispensable Calvin and Hobbes',
+      description: 'The works of Bill Waterson',
+      properties: []
+    });
+  }
+
+  getItem(id: string): Observable<Item> {
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Accept: 'application/json'
+      })
+    };
+
+    return this.http.get<any>('http://localhost:5000/v1/items/' + id, httpOptions)
+      .pipe(
+          tap(response => console.log('response ', response)),
+          map(response => {
+            const t: Item = response.metadata;
+            t.properties = response.properties;
+            return t;
+          })
+      );
+  }
+
 }
