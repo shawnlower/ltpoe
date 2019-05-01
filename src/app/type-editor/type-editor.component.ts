@@ -9,7 +9,7 @@ import { LtpService } from '../services/ltp.service';
 })
 export class TypeEditorComponent implements OnInit {
 
-  model: Object;
+  model: any;
 
   submitted = false;
 
@@ -22,8 +22,8 @@ export class TypeEditorComponent implements OnInit {
 
   resetForm() {
       this.model = {
-          "name": "blah",
-          "description": "would be nice"
+          name: 'blah',
+          description: 'would be nice'
       };
   }
   ngOnInit() {
