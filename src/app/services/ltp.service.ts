@@ -22,7 +22,7 @@ const httpOptions = {
 export class LtpService {
 
   types: Array<Type>;
-  private queryUrl = 'http://localhost:5000/v1/types/';
+  private queryUrl = 'http://localhost:5000/v1';
 
   private getNewTypeQuery(iri) {
     return `query=
@@ -67,18 +67,12 @@ export class LtpService {
 
   getType(id: string): Observable<Type> {
 
-    const httpOptions = {
-      headers: new HttpHeaders({
-        Accept: 'application/json'
-      })
-    };
-
-    return this.http.get<any>('http://localhost:5000/v1/types/' + id, httpOptions)
+    return this.http.get<any>(`${this.queryUrl}/types/${id}`, httpOptions)
       .pipe(
           tap(response => console.log('response ', response)),
           map(response => {
-            const t = <Type>response.metadata;
-            t.properties = <Property[]>response.properties;
+            const t = response.metadata as Type;
+            t.properties = response.properties as Property[];
             return t;
           })
       );
@@ -86,7 +80,7 @@ export class LtpService {
 
   getTypes(): Observable<Type[]> {
 
-    return this.http.get<any>(this.queryUrl, httpOptions)
+    return this.http.get<any>(`${this.queryUrl}/types/`, httpOptions)
       .pipe(
           tap(response => console.log('response ', response)),
           map(response => {
@@ -101,6 +95,29 @@ export class LtpService {
             return this.types;
           }),
           catchError(this.handleError<Type[]>('getTypes', []))
+      );
+  }
+
+
+  getProperties(typeIri: string): Observable<Property[]> {
+
+    const url = `${this.queryUrl}/properties/?typeIri=${typeIri}`;
+    return this.http.get<any>(url, httpOptions)
+      .pipe(
+          tap(response => console.log('getProperties response ', response)),
+          map(response => {
+            const properties: Property[] = [];
+            for (const property of response.data) {
+              properties.push({
+                iri: property.iri as string,
+                name: property.name as string,
+                description: property.description as string,
+                datatype: property.datatype as string,
+              });
+            }
+            return properties;
+          }),
+          catchError(this.handleError<Property[]>('getProperties', []))
       );
   }
 
@@ -137,6 +154,7 @@ export class LtpService {
   newItem(name): Observable<Item> {
     return of({
       id: 'war-of-the-worlds',
+      itemType: 'http://schema.org/Book',
       name: 'Mock Data',
       description: 'The works of H.G. Wells',
       properties: []
@@ -144,12 +162,6 @@ export class LtpService {
   }
 
   getItem(id: string): Observable<Item> {
-
-    const httpOptions = {
-      headers: new HttpHeaders({
-        Accept: 'application/json'
-      })
-    };
 
     return this.http.get<any>('http://localhost:5000/v1/items/' + id, httpOptions)
       .pipe(

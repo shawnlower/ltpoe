@@ -3,5 +3,4 @@ export class Property {
   name: string;
   datatype: string;
   description: string;
-  properties?: Array<any>;
 }
