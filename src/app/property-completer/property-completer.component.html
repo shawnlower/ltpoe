@@ -1,0 +1,21 @@
+<form class="property-form">
+
+  <mat-form-field>
+    <input matInput placeholder="Property Name" aria-label="Property Name" [matAutocomplete]="auto" [formControl]="propertyCtrl">
+
+    <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption>
+
+      <mat-option *ngFor="let property of filteredProperties | async" [value]="property.name" (onSelectionChange)="onEnter($event)">
+        <span>{{property.name}} | </span>
+        <small>{{property.description}} | </small>
+        <small><{{property.datatype}}></small>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field *ngIf='property$'>
+    <input #propVal="ngForm" matInput placeholder="Property Value" aria-label="Property Value" [formControl]="propertyValueCtrl">
+  </mat-form-field>
+</form>
+
+
