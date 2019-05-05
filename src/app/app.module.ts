@@ -11,7 +11,7 @@ import { TypeDetailComponent } from './type-detail/type-detail.component';
 
 import { MatAutocompleteModule } from '@angular/material';
 import { MatToolbarModule, MatIconModule, MatInputModule, MatButtonModule, MatCheckboxModule} from '@angular/material';
-import { MatDialogModule } from '@angular/material';
+import { MatDialogModule, MatSnackBarModule } from '@angular/material';
 import { ItemEditorComponent } from './item-editor/item-editor.component';
 import { DialogNewItemComponent } from './dialog-new-item/dialog-new-item.component';
 

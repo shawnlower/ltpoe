@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 
-import { Observable, of } from 'rxjs';
-import { switchMap, map, tap } from 'rxjs/operators';
+import { Observable, of, forkJoin } from 'rxjs';
+import { switchMap, map, tap, withLatestFrom } from 'rxjs/operators';
 
 import { DialogNewItemComponent } from '../dialog-new-item/dialog-new-item.component';
 import { LtpService } from '../services/ltp.service';
@@ -39,10 +39,10 @@ export class TypeDetailComponent implements OnInit {
       data: {type$: this.type$, name: this.name}
     });
 
-    dialogRef.afterClosed().subscribe(results => {
-      console.log('You entered', results);
-      this.ltpService.newItem(results.name).subscribe(item =>
-        this.router.navigate(['/item/', item.id]));
+    forkJoin( dialogRef.afterClosed(), this.type$
+    ).subscribe( ([response, type])  => {
+        this.ltpService.newItem(response.name, type.iri).subscribe(item =>
+          this.router.navigate(['/item/', item.id]));
     });
   }
 
@@ -50,7 +50,7 @@ export class TypeDetailComponent implements OnInit {
     const id = this.route.snapshot.params.id;
     this.type$ = this.ltpService.getType(id);
     this.type$.subscribe(t =>
-      console.log(t));
+      console.log('type-detail init:', t));
 
     /*
     this.type$ = this.route.paramMap.pipe(

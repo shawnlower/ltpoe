@@ -1,7 +1,7 @@
 <div *ngIf="type$ else loading">
 <h1>{{ (type$ | async)?.name }}</h1>
 <p>Description: <i>{{(type$ | async)?.description}}</i>
-
+<button mat-raised-button (click)="instantiate()">Instantiate</button>
 <table>
   <thead>
     <th>Property Name</th>
@@ -16,8 +16,6 @@
     </tr>
   </tbody>
 </table>
-
-<button mat-raised-button (click)="instantiate()">Instantiate</button>
 </div>
 
 <ng-template #loading>

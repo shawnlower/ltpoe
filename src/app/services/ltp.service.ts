@@ -13,6 +13,7 @@ import { Property } from '../models/property';
 const httpOptions = {
   headers: new HttpHeaders({
     Accept: 'application/json',
+    'Content-Type': 'application/json',
   })
 };
 
@@ -22,6 +23,8 @@ const httpOptions = {
 export class LtpService {
 
   types: Array<Type>;
+
+  queryUrl = '/api/v1';
 
   constructor(private http: HttpClient) { }
 
@@ -51,21 +54,22 @@ export class LtpService {
 
   getType(id: string): Observable<Type> {
 
-    return this.http.get<any>(`${this.queryUrl}/types/${id}`, httpOptions)
+    return this.http.get<any>(`${this.queryUrl}/types/${id}?all_properties=true`, httpOptions)
       .pipe(
           tap(response => console.log('response ', response)),
           map(response => {
             const t = response.metadata as Type;
+            console.log('getType: ', t);
             t.properties = response.properties as Property[];
             return t;
           }),
-          catchError(this.handleError<Type[]>('getType', [])),
+          catchError(this.handleError<Type>('getType', null)),
       );
   }
 
   getTypes(): Observable<Type[]> {
 
-    return this.http.get<any>('http://localhost:5000/v1/types/', httpOptions)
+    return this.http.get<any>(this.queryUrl + '/types/', httpOptions)
       .pipe(
           tap(response => console.log('response ', response)),
           map(response => response.data),
@@ -97,48 +101,41 @@ export class LtpService {
   }
 
 
-  newType(type) {
+  newType(newType: Type) {
 
-    const prefix = 'http://ltp.shawnlower.net/i/';
-    const iri = `${prefix}${uuid()}`;
-
-    const query = this.getNewTypeQuery(iri);
-
-    console.log('newType type: ', type);
-    console.log('newType query: ', query);
-
-    let httpOptions = {
-      headers: new HttpHeaders({
-             Accept: '*/*',
-             'Content-Type': 'application/x-www-form-urlencoded',
-             Authorization: 'Basic ' + btoa('admin:8XHWTTGfcZqWfbo')
-             })
-    };
+    console.log('newType type: ', newType);
 
     const data = new HttpParams();
     console.log('headers', httpOptions);
 
-    return this.http.post('http://localhost:3031/test/update', query, httpOptions)
+    return this.http.post('/api/v1/types', newType, httpOptions)
       .subscribe(response => {
-            console.log('Adding: ', type);
+            console.log('Adding: ', newType);
             console.log('Response: ', response);
-            this.types.push(<Type>type);
       });
   }
 
-  newItem(name): Observable<Item> {
-    return of({
-      id: 'war-of-the-worlds',
-      itemType: 'http://schema.org/Book',
-      name: 'Mock Data',
-      description: 'The works of H.G. Wells',
-      properties: []
-    });
+  newItem(name: string, itemType: string): Observable<Item> {
+    /*
+    const prefix = 'http://ltp.shawnlower.net/i/';
+    const iri = `${prefix}${uuid()}`;
+    */
+
+    console.log('newItem item: ', name, itemType);
+
+    return this.http.post('/api/v1/items', { name: name, itemType: itemType})
+      .pipe(
+          map(response => {
+            console.log('Adding: ', name);
+            console.log('Response: ', response);
+            return response.item as Item;
+          })
+      );
   }
 
   getItem(id: string): Observable<Item> {
 
-    return this.http.get<any>('http://localhost:5000/v1/items/' + id, httpOptions)
+    return this.http.get<any>('/api/v1/items/' + id, httpOptions)
       .pipe(
           tap(response => console.log('response ', response)),
           map(response => {
