@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 import { MatSnackBar } from '@angular/material';
@@ -27,21 +28,22 @@ export class TypesListComponent implements OnInit {
         // this.logger = store.select('logger');
         // this.logger.dispatch({message: "Test Message"});
     }
+    private sanitizer: DomSanitizer,
+    private ltpService: LtpService) { }
 
   deleteType(type) {
       console.log('Request to delete: ', type);
   }
 
   ngOnInit() {
-      // this.route.paramMap.pipe(params =>
-      //   console.log('got params', params));
 
-      this.ltpService.getTypes().subscribe(res => {
-          this.types = res;
-      }, err => {
-          this.snackBar.open(err.message, "Dismiss", {
-            duration: 5000,
-          });
+    this.ltpService.getTypes().subscribe(res => {
+      this.types = [];
+      // Trust any HTML in the description.
+      res.forEach(t => {
+        t.description = this.sanitizer.bypassSecurityTrustHtml(t.description) as string;
+        this.types.push(t);
       });
+    });
   }
 }

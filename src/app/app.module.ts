@@ -9,8 +9,9 @@ import { TypesListComponent } from './types-list/types-list.component';
 import { TypeEditorComponent } from './type-editor/type-editor.component';
 import { TypeDetailComponent } from './type-detail/type-detail.component';
 
-import {MatToolbarModule, MatIconModule, MatInputModule, MatButtonModule, MatCheckboxModule} from '@angular/material';
-import { MatDialogModule, MatSnackBarModule, } from '@angular/material';
+import { MatAutocompleteModule } from '@angular/material';
+import { MatToolbarModule, MatIconModule, MatInputModule, MatButtonModule, MatCheckboxModule} from '@angular/material';
+import { MatDialogModule } from '@angular/material';
 import { ItemEditorComponent } from './item-editor/item-editor.component';
 import { DialogNewItemComponent } from './dialog-new-item/dialog-new-item.component';
 
@@ -21,6 +22,7 @@ import { MatFormFieldModule} from '@angular/material/form-field';
 import { SnackBarComponent } from './snack-bar/snack-bar.component';
 
 import { reducers, metaReducers } from './reducers';
+import { PropertyCompleterComponent } from './property-completer/property-completer.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,7 @@ import { reducers, metaReducers } from './reducers';
     ItemEditorComponent,
     DialogNewItemComponent,
     SnackBarComponent,
+    PropertyCompleterComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -39,6 +42,7 @@ import { reducers, metaReducers } from './reducers';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    MatAutocompleteModule,
     MatButtonModule,
     MatCheckboxModule,
     MatDialogModule,
