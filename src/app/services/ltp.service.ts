@@ -23,37 +23,6 @@ const httpOptions = {
 export class LtpService {
 
   types: Array<Type>;
-  private queryUrl = 'http://localhost:3030/test/query';
-
-  private getTypesQuery = `query=
-      PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-      PREFIX schema: <http://schema.org/>
-      PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-      PREFIX owl: <http://www.w3.org/2002/07/owl#>
-
-      SELECT DISTINCT ?iri ?name ?description WHERE {
-        { ?iri rdf:type owl:Class . }
-          UNION
-        { ?iri rdf:type rdfs:Class . }
-        ?iri rdfs:label ?name .
-        ?iri rdfs:comment ?description
-      } LIMIT 10
-  `;
-
-  private getNewTypeQuery(iri) {
-    return `query=
-      PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-      PREFIX schema: <http://schema.org/>
-      PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-      PREFIX owl: <http://www.w3.org/2002/07/owl#>
-
-      INSERT {
-        <${iri}> rdf:type rdfs:Class .
-        <${iri}> rdfs:label "Foo" .
-        <${iri}> rdfs:comment "Some fooish description"
-      } WHERE {}
-    `;
-  }
 
   constructor(private http: HttpClient) { }
 
@@ -96,27 +65,18 @@ export class LtpService {
             const t = <Type>response.metadata;
             t.properties = <Property[]>response.properties;
             return t;
-          })
+          }),
+          catchError(this.handleError<Type[]>('getType', [])),
       );
   }
 
   getTypes(): Observable<Type[]> {
 
-    return this.http.post<any>(this.queryUrl, this.getTypesQuery, httpOptions)
+    return this.http.get<any>('http://localhost:5000/v1/types/', httpOptions)
       .pipe(
           tap(response => console.log('response ', response)),
-          map(response => {
-            this.types = [];
-            for (var i=0; i < response.results.bindings.length; i++) {
-              this.types.push({
-                iri: response.results.bindings[i].iri.value,
-                name: response.results.bindings[i].name.value,
-                description: response.results.bindings[i].description.value
-              });
-            }
-            return this.types;
-          }),
-          catchError(this.handleError<Type[]>('getTypes', []))
+          map(response => response.data),
+          catchError(this.handleError<Type[]>('getTypes', [])),
       );
   }
 
