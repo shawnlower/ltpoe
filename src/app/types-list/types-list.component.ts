@@ -24,10 +24,8 @@ export class TypesListComponent implements OnInit {
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
     private store: Store<any>,
-    private ltpService: LtpService) {
         // this.logger = store.select('logger');
         // this.logger.dispatch({message: "Test Message"});
-    }
     private sanitizer: DomSanitizer,
     private ltpService: LtpService) { }
 

@@ -78,15 +78,22 @@ export class LtpService {
   }
 
 
-  getProperties(typeIri: string): Observable<Property[]> {
+  getProperties(id: string, allProperties = true): Observable<Property[]> {
 
-    const url = `${this.queryUrl}/properties/?typeIri=${typeIri}`;
+    let idNormalized: string;
+    if ( id.startsWith('http:') ) {
+      idNormalized = id.slice(id.lastIndexOf('/') + 1);
+    } else {
+      idNormalized = id;
+    }
+    const url = `${this.queryUrl}/types/${idNormalized}`;
+
     return this.http.get<any>(url, httpOptions)
       .pipe(
           tap(response => console.log('getProperties response ', response)),
           map(response => {
             const properties: Property[] = [];
-            for (const property of response.data) {
+            for (const property of response.properties) {
               properties.push({
                 iri: property.iri as string,
                 name: property.name as string,
@@ -123,7 +130,7 @@ export class LtpService {
 
     console.log('newItem item: ', name, itemType);
 
-    return this.http.post('/api/v1/items', { name: name, itemType: itemType})
+    return this.http.post<any>('/api/v1/items', { name: name, itemType: itemType})
       .pipe(
           map(response => {
             console.log('Adding: ', name);

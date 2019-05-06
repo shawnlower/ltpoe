@@ -45,7 +45,7 @@ export class PropertyCompleterComponent implements OnInit {
             .subscribe(properties => {
               console.log('results', properties);
               this.filteredProperties = of(properties);
-            })
+            });
   }
 
   private filterProperties(query): Observable<Property[]> {
