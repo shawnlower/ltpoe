@@ -29,11 +29,6 @@ export class TypeDetailComponent implements OnInit {
 
 
   instantiate(): void {
-    /*
-    this.type$.subscribe(o =>
-      this.router.navigate(['/items/new', o.name]));
-      */
-    // const dialogRef = this.dialog.open(DialogTest, {
     const dialogRef = this.dialog.open(DialogNewItemComponent, {
       width: '250px',
       data: {type$: this.type$, name: this.name}

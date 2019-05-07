@@ -7,8 +7,8 @@ import { TypesListComponent } from './types-list/types-list.component';
 
 const routes: Routes = [
   { path: 'types', component: TypesListComponent },
-  { path: 'type/:id', component: TypeDetailComponent },
-  { path: 'item/:id', component: ItemEditorComponent },
+  { path: 'types/:id', component: TypeDetailComponent },
+  { path: 'items/:id', component: ItemEditorComponent },
 ];
 
 
