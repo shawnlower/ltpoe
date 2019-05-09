@@ -37,7 +37,7 @@ export class TypeDetailComponent implements OnInit {
     forkJoin( dialogRef.afterClosed(), this.type$
     ).subscribe( ([response, type])  => {
         this.ltpService.newItem(response.name, type.iri).subscribe(item =>
-          this.router.navigate(['/item/', item.id]));
+          this.router.navigate(['/items/', item.id]));
     });
   }
 

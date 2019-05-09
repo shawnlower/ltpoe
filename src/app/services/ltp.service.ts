@@ -123,20 +123,13 @@ export class LtpService {
   }
 
   newItem(name: string, itemType: string): Observable<Item> {
-    /*
-    const prefix = 'http://ltp.shawnlower.net/i/';
-    const iri = `${prefix}${uuid()}`;
-    */
 
     console.log('newItem item: ', name, itemType);
 
-    return this.http.post<any>('/api/v1/items', { name: name, itemType: itemType})
+    return this.http.post<{ item: Item }>('/api/v1/items', { name, itemType})
       .pipe(
-          map(response => {
-            console.log('Adding: ', name);
-            console.log('Response: ', response);
-            return response.item as Item;
-          })
+        tap(response => console.log('Response: ', response)),
+        map(response => response.item)
       );
   }
 
