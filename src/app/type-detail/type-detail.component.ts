@@ -5,6 +5,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { Observable, of, forkJoin } from 'rxjs';
 import { switchMap, map, tap, withLatestFrom } from 'rxjs/operators';
 
+import { ItemsListComponent } from '../items-list/items-list.component';
 import { DialogNewItemComponent } from '../dialog-new-item/dialog-new-item.component';
 import { LtpService } from '../services/ltp.service';
 import { Type } from '../models/type';
@@ -36,7 +37,7 @@ export class TypeDetailComponent implements OnInit {
 
     forkJoin( dialogRef.afterClosed(), this.type$
     ).subscribe( ([response, type])  => {
-        this.ltpService.newItem(response.name, type.iri).subscribe(item =>
+        this.ltpService.newItem(response.name, type.id).subscribe(item =>
           this.router.navigate(['/items/', item.id]));
     });
   }

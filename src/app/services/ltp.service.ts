@@ -71,7 +71,7 @@ export class LtpService {
 
     return this.http.get<any>(this.queryUrl + '/types/', httpOptions)
       .pipe(
-          tap(response => console.log('response ', response)),
+          tap(response => console.log('getTypes()', response)),
           map(response => response.data),
           catchError(this.handleError<Type[]>('getTypes', [])),
       );
@@ -143,6 +143,16 @@ export class LtpService {
             t.properties = response.properties;
             return t;
           })
+      );
+  }
+
+  getItems(itemTypeId: string): Observable<Item[]> {
+
+    return this.http.get<any>('/api/v1/items/?itemTypeId=' + itemTypeId,
+        httpOptions)
+      .pipe(
+          tap(response => console.log('response ', response)),
+          map(response => response.data as Item[])
       );
   }
 

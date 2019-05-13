@@ -23,6 +23,7 @@ import { SnackBarComponent } from './snack-bar/snack-bar.component';
 
 import { reducers, metaReducers } from './reducers';
 import { PropertyCompleterComponent } from './property-completer/property-completer.component';
+import { ItemsListComponent } from './items-list/items-list.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { PropertyCompleterComponent } from './property-completer/property-comple
     DialogNewItemComponent,
     SnackBarComponent,
     PropertyCompleterComponent,
+    ItemsListComponent,
   ],
   imports: [
     AppRoutingModule,
