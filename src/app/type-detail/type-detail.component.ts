@@ -18,6 +18,7 @@ import { Property } from '../models/property';
 })
 export class TypeDetailComponent implements OnInit {
 
+  typeId: string;
   type$: Observable<any>;
   name: string;
 
@@ -45,8 +46,10 @@ export class TypeDetailComponent implements OnInit {
   ngOnInit() {
     const id = this.route.snapshot.params.id;
     this.type$ = this.ltpService.getType(id);
-    this.type$.subscribe(t =>
-      console.log('type-detail init:', t));
+    this.type$.subscribe(t => {
+      this.typeId = t.id;
+      console.log('type-detail init:', t);
+    });
 
     /*
     this.type$ = this.route.paramMap.pipe(

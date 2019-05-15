@@ -18,7 +18,8 @@
 </table>
 </div>
 
-<app-items-list [itemTypeId]="(this.type$ | async).id"></app-items-list>
+<p>Type: {{ this.typeId }}</p>
+<app-items-list [itemType$]="this.type$"></app-items-list>
 
 <ng-template #loading>
     <p>Loading...</p>

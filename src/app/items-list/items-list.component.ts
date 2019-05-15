@@ -2,6 +2,9 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { LtpService } from '../services/ltp.service';
 import { Item } from '../models/item';
+import { Type } from '../models/type';
+
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-items-list',
@@ -10,15 +13,16 @@ import { Item } from '../models/item';
 })
 export class ItemsListComponent implements OnInit {
 
-  @Input() itemTypeId: string;
+  @Input() itemType$: Observable<Type>;
   items: Item[];
 
   constructor(private ltpService: LtpService) { }
 
   ngOnInit() {
-    console.log('Looking up: ', this.itemTypeId);
-    this.ltpService.getItems(this.itemTypeId).subscribe(res => {
-      this.items = res;
+    this.itemType$.subscribe(t => {
+      this.ltpService.getItems(t.id).subscribe(res => {
+        this.items = res;
+      });
     });
   }
 
