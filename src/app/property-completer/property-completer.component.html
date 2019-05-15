@@ -1,7 +1,7 @@
 <form class="property-form">
 
   <mat-form-field>
-    <input matInput placeholder="Property Name" aria-label="Property Name" [matAutocomplete]="auto" [formControl]="propertyCtrl">
+    <input autofocus matInput placeholder="Property Name" aria-label="Property Name" [matAutocomplete]="auto" [formControl]="propertyCtrl">
 
     <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption>
 
@@ -13,9 +13,18 @@
     </mat-autocomplete>
   </mat-form-field>
 
-  <mat-form-field *ngIf='property$'>
-    <input #propVal="ngForm" matInput placeholder="Property Value" aria-label="Property Value" [formControl]="propertyValueCtrl">
+  <mat-form-field *ngIf='property$ | async as property'>
+    <div [ngSwitch]="property.datatype">
+      <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#string'">
+        <input #propVal="ngForm" matInput placeholder="Property Value" aria-label="Property Value" [formControl]="propertyValueCtrl" >
+      </div>
+      <div *ngSwitchDefault>
+        <p>Items of Type: {{ property.datatype }}</p>
+        <app-item-completer [itemQuery]="foo" [typeId]="property.datatype">
+        </app-item-completer>
+        <button>Create New</button>
+        <input #propVal="ngForm" matInput placeholder="Property Value" aria-label="Property Value" [formControl]="propertyValueCtrl" >
+      </div>
+    </div>
   </mat-form-field>
 </form>
-
-

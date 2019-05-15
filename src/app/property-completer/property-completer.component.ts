@@ -9,6 +9,8 @@ import { Item } from '../models/item';
 import { Property } from '../models/property';
 import { LtpService } from '../services/ltp.service';
 
+import { ItemCompleterComponent } from '../item-completer/item-completer.component';
+
 @Component({
   selector: 'app-property-completer',
   templateUrl: './property-completer.component.html',
@@ -68,10 +70,13 @@ export class PropertyCompleterComponent implements OnInit {
       this.property$ = this.properties$.pipe(
         last(),
         map(properties => properties.filter(p => p.name === name).shift())
-      )
+      );
       this.property$.subscribe(property => {
-        this.propertyCtrl.disable();
-        this.propVal.nativeElement.focus();
+        /* this.propertyCtrl.disable();
+        if (this.propVal.nativeElement) {
+          this.propVal.nativeElement.focus();
+        }
+        */
       });
     }
 

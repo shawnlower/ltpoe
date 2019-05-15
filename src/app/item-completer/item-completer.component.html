@@ -1,0 +1,5 @@
+<p>Items of type {{ this.typeId }}</p>
+<ol *ngIf="allItems$ | async as items">
+  <li *ngFor="let item of items">{{item.name}}</li>
+</ol>
+

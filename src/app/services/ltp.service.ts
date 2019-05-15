@@ -95,7 +95,7 @@ export class LtpService {
             const properties: Property[] = [];
             for (const property of response.properties) {
               properties.push({
-                iri: property.iri as string,
+                id: property.id as string,
                 name: property.name as string,
                 description: property.description as string,
                 datatype: property.datatype as string,
@@ -151,7 +151,7 @@ export class LtpService {
     return this.http.get<any>('/api/v1/items/?itemTypeId=' + itemTypeId,
         httpOptions)
       .pipe(
-          tap(response => console.log('response ', response)),
+          tap(response => console.log('getItems response for', itemTypeId, response)),
           map(response => response.data as Item[])
       );
   }

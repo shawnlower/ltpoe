@@ -1,5 +1,5 @@
 export class Property {
-  iri: string;
+  id: string;
   name: string;
   datatype: string;
   description: string;
