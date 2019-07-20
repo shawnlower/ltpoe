@@ -8,23 +8,21 @@
       <mat-option *ngFor="let property of filteredProperties | async" [value]="property.name" (onSelectionChange)="onEnter($event)">
         <span>{{property.name}} | </span>
         <small>{{property.description}} | </small>
-        <small><{{property.datatype}}></small>
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
 
-  <mat-form-field *ngIf='property$ | async as property'>
-    <div [ngSwitch]="property.datatype">
-      <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#string'">
-        <input #propVal="ngForm" matInput placeholder="Property Value" aria-label="Property Value" [formControl]="propertyValueCtrl" >
+  <div *ngFor="let range_item of (this.property$ | async)?.property_range">
+    <div [ngSwitch]="range_item">
+      <div *ngSwitchCase="'string'">
+        <mat-form-field>
+          <h1>STRING</h1>
+          <input #propVal="ngForm" matInput placeholder="Property Value" aria-label="Property Value" [formControl]="propertyValueCtrl" >
+        </mat-form-field>
       </div>
       <div *ngSwitchDefault>
-        <p>Items of Type: {{ property.datatype }}</p>
-        <app-item-completer [itemQuery]="foo" [typeId]="property.datatype">
-        </app-item-completer>
-        <button>Create New</button>
-        <input #propVal="ngForm" matInput placeholder="Property Value" aria-label="Property Value" [formControl]="propertyValueCtrl" >
+        <app-item-completer [typeId]="range_item"></app-item-completer>
       </div>
-    </div>
-  </mat-form-field>
+  </div>
+  </div>
 </form>

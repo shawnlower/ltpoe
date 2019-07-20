@@ -2,7 +2,7 @@ import { FormControl } from '@angular/forms';
 import { ElementRef, ViewChild } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
-import { filter, last, startWith, map, switchMap } from 'rxjs/operators';
+import { filter, take, last, startWith, map, switchMap } from 'rxjs/operators';
 
 import { Component, Input, OnInit } from '@angular/core';
 import { Item } from '../models/item';
@@ -38,7 +38,6 @@ export class PropertyCompleterComponent implements OnInit {
   ngOnInit() {
     if (this.item) {
       this.item.subscribe(item => {
-        console.log(item);
         this.properties$ = this.ltpService.getProperties(item.item_type);
       });
     }

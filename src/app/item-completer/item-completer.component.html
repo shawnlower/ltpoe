@@ -1,5 +1,6 @@
-<p>Items of type {{ this.typeId }}</p>
-<ol *ngIf="allItems$ | async as items">
-  <li *ngFor="let item of items">{{item.name}}</li>
-</ol>
-
+<input autofocus matInput placeholder="Item Name" aria-label="Item Name" [matAutocomplete]="item_auto" [formControl]="itemValueCtrl">
+<mat-autocomplete #item_auto="matAutocomplete" autoActiveFirstOption>
+  <mat-option *ngFor="let item of filteredItems$ | async" [value]="item.name" (onSelectionChange)="addProperty(item)">
+    <span>{{item.name}}</span>
+  </mat-option>
+</mat-autocomplete>

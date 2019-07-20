@@ -94,10 +94,11 @@ export class LtpService {
             const properties: Property[] = [];
             for (const property of response.properties) {
               properties.push({
-                id: property.id as string,
+                property_id: property.property_id as string,
                 name: property.name as string,
                 description: property.description as string,
-                datatype: property.datatype as string,
+                property_range: property.property_range as Array<string>,
+                property_domain: property.property_domain as Array<string>,
               });
             }
             return properties;
@@ -144,7 +145,7 @@ export class LtpService {
       );
   }
 
-  getItems(itemTypeId: string): Observable<Item[]> {
+  getItems(itemTypeId?: string): Observable<Item[]> {
 
     if (!itemTypeId) itemTypeId="";
 
