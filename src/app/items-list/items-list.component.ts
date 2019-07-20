@@ -20,8 +20,9 @@ export class ItemsListComponent implements OnInit {
 
   ngOnInit() {
     this.itemType$.subscribe(t => {
-      this.ltpService.getItems(t.id).subscribe(res => {
-        this.items = res;
+      this.ltpService.getItems(t.type_id).subscribe(res => {
+          console.log("Got item", t, res);
+          this.items = res;
       });
     });
   }

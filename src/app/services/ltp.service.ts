@@ -59,7 +59,6 @@ export class LtpService {
           tap(response => console.log('response ', response)),
           map(response => {
             const t = response.metadata as Type;
-            console.log('getType: ', t);
             t.properties = response.properties as Property[];
             return t;
           }),
@@ -137,7 +136,7 @@ export class LtpService {
 
     return this.http.get<any>('/api/v1/items/' + id, httpOptions)
       .pipe(
-          tap(response => console.log('response ', response)),
+          tap(response => console.log(`response for ${id}:`, response)),
           map(response => {
             let t = <Item>response;
             return t;
@@ -147,7 +146,7 @@ export class LtpService {
 
   getItems(itemTypeId: string): Observable<Item[]> {
 
-    return this.http.get<any>('/api/v1/items/?itemTypeId=' + itemTypeId,
+    return this.http.get<any>('/api/v1/items/?item_type_id=' + itemTypeId,
         httpOptions)
       .pipe(
           tap(response => console.log('getItems response for', itemTypeId, response)),

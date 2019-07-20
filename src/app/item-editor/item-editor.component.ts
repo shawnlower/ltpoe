@@ -22,8 +22,10 @@ export class ItemEditorComponent implements OnInit {
   ngOnInit() {
     const id: string = this.route.snapshot.params.id;
     this.item$ = this.ltpService.getItem(id);
-    this.item$.subscribe(item =>
-      console.log('got item', item));
+    this.item$.subscribe(item => {
+      console.log('got item', item);
+      console.log('route', this.route.snapshot);
+    });
   }
 
 }
