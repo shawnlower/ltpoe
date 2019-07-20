@@ -38,7 +38,8 @@ export class PropertyCompleterComponent implements OnInit {
   ngOnInit() {
     if (this.item) {
       this.item.subscribe(item => {
-        this.properties$ = this.ltpService.getProperties(item.itemType);
+        console.log(item);
+        this.properties$ = this.ltpService.getProperties(item.item_type);
       });
     }
 

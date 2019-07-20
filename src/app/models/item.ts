@@ -2,7 +2,7 @@ import { Property } from './property';
 
 export class Item {
   id: string;
-  itemType: string;
+  item_type: string;
   name: string;
   description: string;
   properties?: Array<Property>;

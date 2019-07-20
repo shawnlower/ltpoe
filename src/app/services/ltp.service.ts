@@ -139,8 +139,7 @@ export class LtpService {
       .pipe(
           tap(response => console.log('response ', response)),
           map(response => {
-            const t: Item = response.metadata;
-            t.properties = response.properties;
+            let t = <Item>response;
             return t;
           })
       );
