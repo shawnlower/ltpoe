@@ -19,12 +19,18 @@ export class ItemsListComponent implements OnInit {
   constructor(private ltpService: LtpService) { }
 
   ngOnInit() {
-    this.itemType$.subscribe(t => {
-      this.ltpService.getItems(t.type_id).subscribe(res => {
-          console.log("Got item", t, res);
-          this.items = res;
-      });
-    });
+    this.ltpService.getItems().subscribe(res => {
+        console.log("Got item", res);
+        this.items = res;
+        });
+
+    if (this.itemType$ )
+      this.itemType$.subscribe(t => {
+          this.ltpService.getItems(t.type_id).subscribe(res => {
+              console.log("Got item", t, res);
+              this.items = res;
+              });
+          });
   }
 
 }

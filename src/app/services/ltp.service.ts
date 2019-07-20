@@ -146,6 +146,8 @@ export class LtpService {
 
   getItems(itemTypeId: string): Observable<Item[]> {
 
+    if (!itemTypeId) itemTypeId="";
+
     return this.http.get<any>('/api/v1/items/?item_type_id=' + itemTypeId,
         httpOptions)
       .pipe(
