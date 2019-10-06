@@ -1,3 +1,4 @@
+<div>
 <h1>Types List</h1>
 <table>
   <thead>
@@ -6,15 +7,21 @@
   </thead>
   <tbody>
     <tr *ngFor="let type of types">
-      <td><a [routerLink]="['/types', type.name]">{{type.name}}</a></td>
+      <td><a href="#" (click)="!!this.selectType(type)">{{type.name}}</a></td>
       <td [innerHtml]="type.description"></td>
       <td
         (click)="deleteType(type)"
-      >Delete</td>
+      ><a href="#">Delete</a></td>
     </tr>
   </tbody>
 </table>
-
 <button>New Type</button>
 
-<app-type-editor></app-type-editor>
+<div [ngClass]="'lower-pane'">
+  <div class="type-detail">
+    <app-type-detail [selectedType]="this.selectedType" *ngIf="this.selectedType"></app-type-detail>
+  </div>
+  <div class="items-list">
+    <app-props-list [selectedType]="this.selectedType" *ngIf="this.selectedType"></app-props-list>
+  <div>
+</div>

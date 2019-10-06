@@ -1,0 +1,12 @@
+.lower-pane {
+  display: flex;
+  flex-direction: row;
+}
+
+.type-detail {
+  width: 50%;
+}
+
+.items-list {
+  width: 50%;
+}

@@ -3,17 +3,18 @@
   <h2><i>Type:</i> {{ (item$ | async)?.item_type }}</h2>
   <h3><i>Description:</i> {{(type$ | async)?.properties.description}}</h3>
 
-<table>
-  <thead>
-    <th>Property Name</th>
-    <th>Description</th>
-    <th>Value</th>
-  </thead>
-  <tbody *ngIf="item$ | async">
-    <tr *ngFor="let property of (item$ | async)?.properties | keyvalue">
-      <td>{{property.key}}</td>
-      <td>{{property.value}}</td>
-    </tr>
-  </tbody>
-</table>
-<app-property-completer [item]="item$"></app-property-completer>
+  <table>
+    <thead>
+      <th>Property Name</th>
+      <th>Description</th>
+      <th>Value</th>
+    </thead>
+    <tbody *ngIf="item$ | async">
+      <tr *ngFor="let property of (item$ | async)?.properties | keyvalue">
+        <td>{{property.key}}</td>
+        <td>{{property.value}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <app-property-completer [item]="item$"></app-property-completer>
+</div>

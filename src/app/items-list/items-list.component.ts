@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-
 import { LtpService } from '../services/ltp.service';
 import { Item } from '../models/item';
 import { Type } from '../models/type';
@@ -13,24 +12,17 @@ import { Observable, of } from 'rxjs';
 })
 export class ItemsListComponent implements OnInit {
 
-  @Input() itemType$: Observable<Type>;
+  @Input() itemType: Type;
   items: Item[];
 
   constructor(private ltpService: LtpService) { }
 
   ngOnInit() {
-    this.ltpService.getItems().subscribe(res => {
-        console.log("Got item", res);
-        this.items = res;
-        });
-
-    if (this.itemType$ )
-      this.itemType$.subscribe(t => {
-          this.ltpService.getItems(t.type_id).subscribe(res => {
-              console.log("Got item", t, res);
-              this.items = res;
-              });
-          });
+    if (this.itemType ) {
+      this.ltpService.getItems(this.itemType.type_id).subscribe(res => {
+          console.log("Got item", res);
+          this.items = res;
+      });
+    }
   }
-
 }

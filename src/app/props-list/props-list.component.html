@@ -1,0 +1,15 @@
+<table>
+  <thead>
+    <th>Property Name</th>
+    <th>Description</th>
+    <th>Data Type</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let property of this.selectedType.properties">
+      <td>{{property.name}}</td>
+      <td>{{property.description}}</td>
+      <td>{{property.datatype}}</td>
+    </tr>
+  </tbody>
+</table>
+

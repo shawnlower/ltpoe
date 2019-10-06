@@ -5,6 +5,6 @@
   </mat-form-field>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-button [mat-dialog-close]="data">Create</button>
+  <button type="button" mat-button (click)="onCancel()">Cancel</button>
+  <button type="submit" mat-button [mat-dialog-close]="data">Create</button>
 </div>

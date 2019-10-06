@@ -27,5 +27,4 @@ export class ItemEditorComponent implements OnInit {
       console.log('route', this.route.snapshot);
     });
   }
-
 }

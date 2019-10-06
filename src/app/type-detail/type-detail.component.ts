@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 import { Observable, of } from 'rxjs';
 import { switchMap, map, tap } from 'rxjs/operators';
 
+import { DialogNewItemComponent } from '../dialog-new-item/dialog-new-item.component';
 import { LtpService } from '../services/ltp.service';
 import { Type } from '../models/type';
 import { Property } from '../models/property';
@@ -15,33 +17,31 @@ import { Property } from '../models/property';
 })
 export class TypeDetailComponent implements OnInit {
 
-  type$: Observable<any>;
+  @Input() selectedType: Type;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private ltpService: LtpService
+    private ltpService: LtpService,
+    private dialog: MatDialog,
   ) { }
 
-
   ngOnInit() {
-    const id = this.route.snapshot.params.id;
-    this.type$ = this.ltpService.getType(id);
-    this.type$.subscribe(t =>
-      console.log(t));
-
-    /*
-    this.type$ = this.route.paramMap.pipe(
-      switchMap(params => {
-        const id = 'Book'; // params.get('id');
-
-        console.log('loading type definition for: ', id);
-
-        return this.ltpService.getType(id);
-      })
-    );
-    */
-
+    console.log('TypeDetail: ', this.selectedType);
   }
 
+  private instantiate() {
+    console.log("Creating new item of type: ", this.selectedType.name);
+    const dialogRef = this.dialog.open(DialogNewItemComponent, {
+      data: {
+        name: "",
+        type: this.selectedType,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+        console.log('From dialog: ', result);
+    });
+
+  }
 }

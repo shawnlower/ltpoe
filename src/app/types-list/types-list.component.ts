@@ -19,13 +19,14 @@ export class TypesListComponent implements OnInit {
   logger: any;
 
   types: Array<Type>;
+  selectedType: Type;
 
   constructor(
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
     private store: Store<any>,
-        // this.logger = store.select('logger');
-        // this.logger.dispatch({message: "Test Message"});
+    // this.logger = store.select('logger');
+    // this.logger.dispatch({message: "Test Message"});
     private sanitizer: DomSanitizer,
     private ltpService: LtpService) { }
 
@@ -34,7 +35,6 @@ export class TypesListComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.ltpService.getTypes().subscribe(res => {
       this.types = [];
       // Trust any HTML in the description.
@@ -44,4 +44,10 @@ export class TypesListComponent implements OnInit {
       });
     });
   }
+
+  selectType(t) {
+    console.log("Selecting type: ", t);
+    this.selectedType = t;
+  }
+
 }
