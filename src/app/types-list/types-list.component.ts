@@ -37,8 +37,8 @@ export class TypesListComponent implements OnInit {
   ngOnInit() {
     this.ltpService.getTypes().subscribe(res => {
       this.types = [];
-      // Trust any HTML in the description.
       res.forEach(t => {
+        // Trust any HTML in the description.
         t.description = this.sanitizer.bypassSecurityTrustHtml(t.description) as string;
         this.types.push(t);
       });
@@ -46,8 +46,12 @@ export class TypesListComponent implements OnInit {
   }
 
   selectType(t) {
-    console.log("Selecting type: ", t);
-    this.selectedType = t;
+    // Types list does not include properties. Fetch them for the single selected type
+    this.ltpService.getProperties(t.type_id).subscribe(properties => {
+      t.properties = properties;
+      this.selectedType = t;
+      console.log("Selecting type: ", t);
+    });
   }
 
 }

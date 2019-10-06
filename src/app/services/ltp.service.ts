@@ -58,8 +58,8 @@ export class LtpService {
       .pipe(
           tap(response => console.log('response ', response)),
           map(response => {
-            const t = response.metadata as Type;
-            t.properties = response.properties as Property[];
+            const t: Type = response.metadata;
+            t.properties = response.properties;
             return t;
           }),
           catchError(this.handleError<Type>('getType', null)),
