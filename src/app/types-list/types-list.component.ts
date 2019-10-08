@@ -42,6 +42,11 @@ export class TypesListComponent implements OnInit {
         t.description = this.sanitizer.bypassSecurityTrustHtml(t.description) as string;
         this.types.push(t);
       });
+
+      // Select the first entry automatically
+      if (this.types.length > 0) {
+        this.selectType(this.types[0]);
+      }
     });
   }
 
