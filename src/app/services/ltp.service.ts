@@ -8,6 +8,7 @@ import { tap, catchError, map } from 'rxjs/operators';
 
 import { Item } from '../models/item';
 import { Type } from '../models/type';
+import { Mapping } from '../models/mapping';
 import { Property } from '../models/property';
 
 const httpOptions = {
@@ -63,6 +64,16 @@ export class LtpService {
             return t;
           }),
           catchError(this.handleError<Type>('getType', null)),
+      );
+  }
+
+  getMappings(resource: string): Observable<Mapping[]> {
+
+    return this.http.get<any>(this.queryUrl + '/mappings/' + resource, httpOptions)
+      .pipe(
+          tap(response => console.log('getMappings()', response)),
+          map(response => response.mappings),
+          catchError(this.handleError<Mapping[]>('getMappings', [])),
       );
   }
 

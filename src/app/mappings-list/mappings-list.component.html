@@ -1,0 +1,24 @@
+<h3>Mappings for {{ this.itemType.name }}</h3>
+<div *ngIf="this.mappings">
+  <table>
+    <tr>
+      <th>Ontology</th>
+      <th>Name</th>
+      <th>Mapping Type</th>
+    </tr>
+    <tr *ngFor="let mapping of mappings">
+      <td>{{ mapping.ontology }}</td>
+      <td>{{ mapping.name }}</td>
+      <td>{{ mapping.mapping_type }}</td>
+    </tr>
+    <tr *ngIf="this.add_mapping_visible">
+      <td><input></td>
+      <td><input></td>
+      <td><input></td>
+      <td><button type="submit">Save</button></td>
+    </tr>
+  </table>
+  <button
+    (click)="this.add_mapping_visible=!this.add_mapping_visible"
+  >Add</button>
+</div>

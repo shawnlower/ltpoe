@@ -1,0 +1,72 @@
+c3po: Common 3rd party ontologies
+
+
+Types
+Properties
+
+
+WordNet
+
+Wiktionary
+
+Wikidata
+
+SDO:
+
+
+# SKOS Overview
+
+ltp:ltpVocab rdf:type skos:ConceptScheme;
+             skos:hasTopConcept: ltp:Thing .
+
+ltp:Thing    rdf:type    skos:Concept ;
+             skos:prefLabel "Thing"
+
+
+equivalent class: https://www.wikidata.org/wiki/Property:P1709
+
+exact match: https://www.wikidata.org/wiki/Q39893449
+             Two concepts have equivalent meaning, and the link can be exploited across a wide range of applications and schemes.
+             The link is meant to be transitive.
+
+equivalent property: https://www.wikidata.org/wiki/Property:P1628
+
+
+# Creating a new Type 'Book'
+
+- Generate unique localname Book
+
+  Book  a  skos:Concept, rdfs:Class .
+
+- Get potential related matches in common ontologies, e.g. WordNet, Schema, Wikidata
+
+  /concepts?q="Book"
+
+  <Book> <skos:relatedMatch>  <schema:Book>, <wn:Book>;
+
+- Get a list of properties from common ontologies
+
+  /properties?o={'wn': '<wn:Book>', 'schema': '<schema:Book>'}
+
+  {
+    'matches': {
+        'wn': [
+          { 'name': 'author', 'description': '...' },
+          { 'name': 'isbn', 'description': '...' },
+        ],
+        'schema': [ .. ]
+    }
+  }
+
+- Create own properties
+
+  <ltp:author> <rdfs:domain> <ltp:Book> ;
+               <skos:exactMatch> <schema:author> ;
+               <skos:related> <wn:author>
+
+
+# References
+https://www.bioontology.org/wiki/SKOSSupport#SKOS_mapping_properties
+https://www.w3.org/TR/skos-primer/
+https://www.wikidata.org/wiki/Wikidata:WikiProject_Ontology/Mapping
+  https://github.com/schemaorg/schemaorg/wiki/Issue-280,-quering-Wikidata#standard-sparql-query

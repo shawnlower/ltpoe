@@ -26,6 +26,7 @@ import { PropertyCompleterComponent } from './property-completer/property-comple
 import { ItemsListComponent } from './items-list/items-list.component';
 import { ItemCompleterComponent } from './item-completer/item-completer.component';
 import { PropsListComponent } from './props-list/props-list.component';
+import { MappingsListComponent } from './mappings-list/mappings-list.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { PropsListComponent } from './props-list/props-list.component';
     ItemsListComponent,
     ItemCompleterComponent,
     PropsListComponent,
+    MappingsListComponent,
   ],
   imports: [
     AppRoutingModule,

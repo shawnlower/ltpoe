@@ -1,13 +1,12 @@
 <div *ngIf="this.selectedType else loading">
   <h1>{{ this.selectedType.name }}</h1>
-  <p>Description:</p><div [innerHtml]=this.selectedType.description></div>
-  <br />
+  <p><strong>Description: </strong><em><span [innerHtml]=this.selectedType.description></span></em></p>
   <button mat-raised-button (click)="instantiate()">Instantiate</button>
+  <app-mappings-list [itemType]="this.selectedType"></app-mappings-list>
+
+  <app-items-list [itemType]="this.selectedType"></app-items-list>
+
 </div>
-
-<p>Type: {{ this.selectedType.typeId }}</p>
-<app-items-list [itemType]="this.selectedType"></app-items-list>
-
 <ng-template #loading>
     <p>Loading...</p>
 </ng-template>
